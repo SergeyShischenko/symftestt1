@@ -25,4 +25,13 @@ class MainController extends AbstractController
             'form'=>$form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/artec/{page}", name="app_artec", requirements={"page"="\d+"})
+     */
+    public function artec($page=1){
+
+        return $this->render('main/artec.html.twig');
+
+    }
 }
