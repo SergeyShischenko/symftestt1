@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert; // 12. Путь к валидатору
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\NotesRepository")
@@ -17,11 +18,27 @@ class Notes
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min="3",
+     *     max="20",
+     *     minMessage="Ваша сообщение:{{ value }} слишком короткое. Количество символов не должно быть  менее {{ limit }} знаков",
+     *     maxMessage="Количество символов не более {{ limit }}"
+     * )
+     * @Assert\Email(
+     *     message="Ваша электронная почта {{ value }} неверная. Введите правильную электронную почту.",
+     *     checkMX=true,
+     *
+     * )
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $title;
 
     /**
+     *@Assert\NotBlank()
+     * @Assert\Choice(
+     *     {"Город", "Деревня"}
+     * )
      * @ORM\Column(type="string", length=1200, nullable=true)
      */
     private $descroption;

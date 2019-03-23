@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert; // 12. Путь к валидатору
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArtecRepository")
@@ -17,6 +19,14 @@ class Artec
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min="20",
+     *     max="70",
+     *     minMessage="В вашем крутом сообщении: {{ value }} очень мало текста. Должно быть минимум {{ limit }} знаков."
+     *
+     * )
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $titleatr;
