@@ -35,6 +35,8 @@ class MainController extends AbstractController
            //7.Загружаем в БД:
             $em->persist($note);//8.метод "персист" готовит нашу таблицу к тому что сейчас появится новая запись(общение с БД происходит через объекты)Нам нужно в контексте записи подготовить этот объект.
             $em->flush();//9.метод "флюш" вносит изменения, (которые подготовил Персист)
+
+            return $this->redirectToRoute('index'); // 12.чтобы форма после отправки стала пустой
         }
         $notes = $em->getRepository(Notes::class)->findAll();// 10. в переменную notes получим таблицу из наши сущьности Notes. Делаем это через метод getRepository и вставляет Notes + используем метод findAll.
 
@@ -47,9 +49,9 @@ class MainController extends AbstractController
     }
 
     /**
-     * @Route("/artec/{page}", name="app_artec")
+     * @Route("/artec", name="app_artec")
      */
-    public function artec($page, LoggerInterface $logger, Request $request){
+    public function artec(LoggerInterface $logger, Request $request){
 
          $em = $this->getDoctrine()->getManager();
 
@@ -60,6 +62,8 @@ class MainController extends AbstractController
         if($formartec->isSubmitted() && $formartec->isValid()){
             $em->persist($artec);
             $em->flush();
+
+            return $this->redirectToRoute('app_artec');
         }
 
         $artecs = $em->getRepository(Artec::class)->findAll();
@@ -69,7 +73,20 @@ class MainController extends AbstractController
             'formartec'=>$formartec->createView(),
             'artecs'=>$artecs,
         ]);
+    }
 
+    /**
+     *@Route("/remove/{note}", name="remove_note")
+     */
+
+    public function removeNote(Notes $note, Request $request){
+
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($note);
+        $em->flush();
+
+        return $this->redirectToRoute('index');
 
     }
+
 }
